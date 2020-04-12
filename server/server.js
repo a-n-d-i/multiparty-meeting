@@ -199,7 +199,7 @@ function setupLTI(ltiConfig)
 				if (lti.user_id && lti.custom_room)
 				{
 					user.id = lti.user_id;
-					user._lti = lti;
+					user.userinfo._lti = lti;
 				}
 
 				if (lti.custom_room)
@@ -255,12 +255,12 @@ function setupOIDC(oidcIssuer)
 		{ client: oidcClient, params, passReqToCallback, usePKCE },
 		(tokenset, userinfo, done) =>
 		{
+			userinfo._claims = tokenset.claims;
 			const user =
 			{
 				id        : tokenset.claims.sub,
 				provider  : tokenset.claims.iss,
-				_userinfo : userinfo,
-				_claims   : tokenset.claims
+				userinfo  : userinfo
 			};
 
 			return done(null, user);
@@ -362,7 +362,7 @@ async function setupAuth()
 				await config.userMapping({
 					peer,
 					roomId,
-					userinfo : req.user._userinfo
+					userinfo : req.user.userinfo
 				});
 			}
 
@@ -546,7 +546,7 @@ async function runWebSocketServer()
 		
 				if (typeof config.userMapping === 'function')
 				{
-					await config.userMapping({ peer, roomId, userinfo: _userinfo });
+					await config.userMapping({ peer, roomId, userinfo: userinfo });
 				}
 			}
 
