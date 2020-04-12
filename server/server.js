@@ -248,7 +248,7 @@ function setupOIDC(oidcIssuer)
 
 	// optional, defaults to false, when true the code_challenge_method will be
 	// resolved from the issuer configuration, instead of true you may provide
-	// any of the supported values directly, i.e. "S256" (recommended) or "plain"
+	// any of the supporteds values directly, i.e. "S256" (recommended) or "plain"
 	const usePKCE = false;
 
 	oidcStrategy = new Strategy(
@@ -264,8 +264,8 @@ function setupOIDC(oidcIssuer)
 
 			};
 
-			user.userinfo._oidc_claims = tokenset.claims;
-			console.log(user.userinfo._oidc_claims)
+			Object.assign(user.userinfo._oidc_claims, tokenset.claims);
+			console.log(user.userinfo._oidc_claims);
 
 			return done(null, user);
 		}
