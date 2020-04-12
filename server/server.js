@@ -256,6 +256,8 @@ function setupOIDC(oidcIssuer)
 		(tokenset, userinfo, done) =>
 		{
 
+			userinfo._claims= tokenset.claims();
+
 			const user =
 			{
 				id        : tokenset.claims.sub,
@@ -263,9 +265,6 @@ function setupOIDC(oidcIssuer)
 				userinfo  : userinfo
 
 			};
-
-			Object.assign(user.userinfo._oidc_claims, tokenset.claims);
-			console.log(user.userinfo._oidc_claims);
 
 			return done(null, user);
 		}
