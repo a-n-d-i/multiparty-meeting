@@ -255,13 +255,17 @@ function setupOIDC(oidcIssuer)
 		{ client: oidcClient, params, passReqToCallback, usePKCE },
 		(tokenset, userinfo, done) =>
 		{
-			userinfo._claims = tokenset.claims.toString()
+
 			const user =
 			{
 				id        : tokenset.claims.sub,
 				provider  : tokenset.claims.iss,
 				userinfo  : userinfo
+
 			};
+
+			user.userinfo._oidc_claims = tokenset.claims;
+			console.log(user.userinfo._oidc_claims)
 
 			return done(null, user);
 		}
